@@ -10,8 +10,8 @@ def carica_da_file(file_path):
             diz["cod"]=campo[0]
             diz["tit"]=campo[1]
             diz["aut"]=campo[2]
-            diz["mes"]=campo[3]
-            diz["ann"]=campo[4]
+            diz["mes"]=int(campo[3])
+            diz["ann"]=int(campo[4])
             album.append(diz)
         infile.close()
     except FileNotFoundError:
@@ -24,21 +24,42 @@ def carica_da_file(file_path):
 
 def aggiungi_foto(album, codice, titolo, autore, mese, anno, file_path):
     """Aggiunge una foto all'album, creando l'anno al volo se non è ancora presente"""
-    album.append(codice["cod"])
-    album.append(titolo["tit"])
-    album.append(autore["aut"])
-    album.append(mese["mes"])
-    album.append(anno["ann"])
-
+    infile=open(file_path,"w")
+    infile.write(f"{codice}, {titolo}, {autore}, {mese}, {anno}")
+    insieme_codici = set()
+    for diz in album:
+        insieme_codici.add(diz["cod"])
+    nuova_foto={
+        "cod":codice,
+        "tit":titolo,
+        "aut":autore,
+        "mes":mese,
+        "ann":anno,
+    }
+    album.append(nuova_foto)
+    if mese<12 and mese>1:
+        if codice not in insieme_codici:
+            print(nuova_foto)
+        else:
+            nuova_foto=None
+            print(nuova_foto)
+    else:
+        nuova_foto = None
+        print(nuova_foto)
+    return album
 
 def cerca_foto(album, codice):
     """Cerca una foto nell'album dato il codice"""
-    # TODO
+    if codice in album["cod"]:
+        print(f"{codice}, {codice["tit"], codice["aut"], codice["mes"], codice["ann"]}")
 
 
 def elenco_foto_anno_per_titolo(album, anno):
     """Ordina i titoli delle foto di un dato anno in ordine alfabetico"""
-    # TODO
+    insieme_anni = set()
+    for a in album:
+        insieme_anni.add(a["ann"])
+
 
 
 def main():
