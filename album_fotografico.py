@@ -24,8 +24,6 @@ def carica_da_file(file_path):
 
 def aggiungi_foto(album, codice, titolo, autore, mese, anno, file_path):
     """Aggiunge una foto all'album, creando l'anno al volo se non è ancora presente"""
-    infile=open(file_path,"w")
-    infile.write(f"{codice}, {titolo}, {autore}, {mese}, {anno}")
     insieme_codici = set()
     for diz in album:
         insieme_codici.add(diz["cod"])
@@ -37,28 +35,49 @@ def aggiungi_foto(album, codice, titolo, autore, mese, anno, file_path):
         "ann":anno,
     }
     album.append(nuova_foto)
-    if mese<12 and mese>1:
+    if mese<13 and mese>0:
         if codice not in insieme_codici:
+            infile = open(file_path, "a")
+            infile.write(f"\n{codice},{titolo},{autore},{mese},{anno}")
+            infile.close()
             print(nuova_foto)
         else:
+            print("codice gia esistente")
             nuova_foto=None
             print(nuova_foto)
     else:
+        print("mese non esistente")
         nuova_foto = None
         print(nuova_foto)
-    return album
+    return nuova_foto
 
 def cerca_foto(album, codice):
     """Cerca una foto nell'album dato il codice"""
-    if codice in album["cod"]:
-        print(f"{codice}, {codice["tit"], codice["aut"], codice["mes"], codice["ann"]}")
+    insieme_cod=set()
+    for cod in album:
+        insieme_cod.add(cod["cod"])
+    if codice in insieme_cod:
+        stringa=(f"{codice}, {cod["tit"], cod["aut"], cod["mes"], cod["ann"]}")
+    else:
+        stringa=None
+    return stringa
 
 
 def elenco_foto_anno_per_titolo(album, anno):
     """Ordina i titoli delle foto di un dato anno in ordine alfabetico"""
+    foto_per_anno=[]
     insieme_anni = set()
     for a in album:
         insieme_anni.add(a["ann"])
+    if anno in insieme_anni:
+        print(f"foto dell'anno {anno}: ")
+        for foto in album:
+            if foto["ann"]==anno:
+                foto_per_anno.append(foto)
+        foto_per_anno.sort(key=lambda x: x["tit"])
+    else:
+        foto_per_anno=None
+    return foto_per_anno
 
 
 
